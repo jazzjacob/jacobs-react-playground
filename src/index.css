@@ -3,3 +3,12 @@ body {
 	margin: 0;
 	background-color: dodgerblue
 }
+
+.columnsParent {
+	color: red;
+}
+
+.columnsParent::-webkit-scrollbar { 
+		display: none;  /* Safari and Chrome */
+		width: 0
+}
