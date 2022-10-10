@@ -1,11 +1,27 @@
+import { useState } from 'react'
+
 import Box from './Components/Box'
 import MousePosition from './Components/MousePosition'
 import Column from './Components/Column'
 
-const HomePage = () => {
-	const columns = [1, 1, 1, 1, 1, 1, 1]
+const HomePage = () => {	
+	const [columns, setColumns] = useState([1, 2, 3, 4, 5, 6, 7])
+	
+	function onColumnClick(index) {
+		// Move value in array one step to the left
+		let columnsCopy = [...columns]
+		let startValue = columns[index]
+		let valueAtNewIndex = columns[index + 1]
+		columnsCopy[index] = valueAtNewIndex
+		columnsCopy[index + 1] = startValue
+		setColumns(columnsCopy)
+		
+		console.log(columnsCopy)
+		
+	}
+	
 	const columnsList = columns.map((item, index) => {
-		return <Column key={index} />
+		return <Column onClick={() => onColumnClick(index)} key={index} number={item} />
 	})
 	
 	const columnsParentStyle = {

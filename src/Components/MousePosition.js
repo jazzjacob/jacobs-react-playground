@@ -11,16 +11,12 @@ export default function App() {
 			});
 		};
 		
-		window.addEventListener('mousemove', handleWindowMouseMove);
+		window.addEventListener('mousemove', handleWindowMouseMove)
 
 		return () => {
-			window.removeEventListener('mousemove', handleWindowMouseMove);
+			window.removeEventListener('mousemove', handleWindowMouseMove)
 		};
 	}, []);
-	
-	useEffect(() => {
-			console.log(coords);
-	},[coords]);
 
 	return (
 		<div>

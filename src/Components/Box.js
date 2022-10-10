@@ -45,7 +45,7 @@ const Box = () => {
 	
 	return (
 		<div
-			style={!clicked ? boxStyle : altBoxStyle }
+			style={clicked ? boxStyle : altBoxStyle }
 			className={styles.box}
 			onClick={() => {
 				setClicked(!clicked)

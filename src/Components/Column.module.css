@@ -1,0 +1,8 @@
+.column:hover {
+	cursor: pointer;
+	background-color: gray;
+}
+
+.column {
+	background-color: lightgray;
+}
