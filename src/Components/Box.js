@@ -4,7 +4,9 @@ import styles from './Box.module.css'
 const Box = () => {
 	const [clicked, setClicked] = useState(false)
 	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
+	const [offset, setOffset] = useState({x: 0, y: 0})
 	const [hoverState, setHoverState] = useState(null)
+	const [relativeCoordinates, setRelativeCoordinates] = useState({x: 0, y: 0})
 	
 	useEffect(() => {
 		const handleWindowMouseMove = event => {
@@ -24,29 +26,49 @@ const Box = () => {
 	
 	const [boxStyle, setBoxStyle] = useState({
 		position: 'absolute',
-		top: `${coordinates.y}px`,
-		left: `${coordinates.x}px`,
+		top: `${coordinates.y - offset.y}px`,
+		left: `${coordinates.x - offset.x}px`,
 		width: '100px',
 		height: '100px',
-		backgroundColor: 'gold'
+		backgroundColor: 'gold',
+		cursor: 'grabbing'
 	})
 
 	
 	useEffect(() => {
 		setBoxStyle({
 			position: 'absolute',
-			top: `${coordinates.y}px`,
-			left: `${coordinates.x}px`,
+			top: `${coordinates.y - offset.y}px`,
+			left: `${coordinates.x - offset.x}px`,
 			width: '100px',
 			height: '100px',
-			backgroundColor: 'gold'
+			backgroundColor: 'gold',
+			cursor: 'grabbing'
 		})
 		
-		if (25 < coordinates.x < 225) {
-			setHoverState(0)
-		}
-		
 	}, [coordinates])
+	
+	const textStyle = {
+		color: 'white',
+		fontFamily: 'Helvetica'
+	}
+	
+	function onMouseMove(event) {
+	
+	}
+	
+	function onMouseDown(event) {
+		console.log(event)
+		setOffset({
+			x: event.clientX - event.target.offsetLeft,
+			y: event.clientY - event.target.offsetTop
+		})
+		setClicked(true)
+	}
+	
+	useEffect(() => {
+		console.log(offset)
+	}, [offset])
 	
 	
 	
@@ -54,10 +76,10 @@ const Box = () => {
 		<div
 			style={clicked ? boxStyle : altBoxStyle }
 			className={styles.box}
-			onClick={() => {
-				setClicked(!clicked)
-				console.log('Clicked!')
-			}}>
+			onMouseDown={onMouseDown}
+			onMouseUp={() => setClicked(false)}
+			onMouseMove={onMouseMove}
+		>
 		</div>
 	)
 }
@@ -66,7 +88,7 @@ const Box = () => {
 const altBoxStyle = {
 	width: '100px',
 	height: '100px',
-	backgroundColor: 'red'
+	backgroundColor: 'blue'
 }
 
 

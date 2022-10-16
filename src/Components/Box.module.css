@@ -1,7 +1,14 @@
 .box {
 	color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .box:hover {
-	cursor: pointer;
+	cursor: grab;
+}
+
+.box:focus, .box:focus-visible, .box:active {
+	cursor: grabbing;
 }

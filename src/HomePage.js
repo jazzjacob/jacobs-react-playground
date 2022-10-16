@@ -9,7 +9,6 @@ const HomePage = () => {
 	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
 	const [testClicked, setTestClicked] = useState(false)
 	
-	
 	useEffect(() => {
 		const handleWindowMouseMove = event => {
 			setCoordinates({
@@ -18,24 +17,31 @@ const HomePage = () => {
 			});
 		};
 		
+		window.addEventListener('mousemove', handleWindowMouseMove);
+	
+		return () => {
+			window.removeEventListener('mousemove', handleWindowMouseMove);
+		};
+	}, []);
+	
+	
+	useEffect(() => {
+
+		// console.log(coordinates)
+	}, [coordinates])
+	
+	
+	// Window click event listener 
+	/*useEffect(() => {
 		const handleWindowClick = event => {
 			console.log(event)
 			setTestClicked(!testClicked)
 		}
 		
 		window.addEventListener('click', handleWindowClick)
-		window.addEventListener('mousemove', handleWindowMouseMove);
-	
-		return () => {
-			window.removeEventListener('mousemove', handleWindowMouseMove);
-			window.removeEventListener('click', handleWindowClick)
-		};
-	}, []);
-	
-	useEffect(() => {
-
-		// console.log(coordinates)
-	}, [coordinates])
+		
+		return () => window.removeEventListener('click', handleWindowClick)
+	}, [testClicked])*/
 	
 	function onColumnClick(index) {
 		// Move value in array one step to the left
@@ -65,12 +71,12 @@ const HomePage = () => {
 	
 	return (
 		<div style={style}>
-			<Box />
 			<MousePosition />
 			{testClicked && <p>Clicked!</p>}
 			<div className='columnsParent' style={columnsParentStyle}>
 				{columnsList}
 			</div>
+			<Box />
 		</div>
 	)
 }
