@@ -4,6 +4,7 @@ import styles from './Box.module.css'
 const Box = () => {
 	const [clicked, setClicked] = useState(false)
 	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
+	const [hoverState, setHoverState] = useState(null)
 	
 	useEffect(() => {
 		const handleWindowMouseMove = event => {
@@ -19,6 +20,7 @@ const Box = () => {
 			window.removeEventListener('mousemove', handleWindowMouseMove);
 		};
 	}, []);
+	
 	
 	const [boxStyle, setBoxStyle] = useState({
 		position: 'absolute',
@@ -39,6 +41,11 @@ const Box = () => {
 			height: '100px',
 			backgroundColor: 'gold'
 		})
+		
+		if (25 < coordinates.x < 225) {
+			setHoverState(0)
+		}
+		
 	}, [coordinates])
 	
 	

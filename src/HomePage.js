@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Box from './Components/Box'
 import MousePosition from './Components/MousePosition'
@@ -6,6 +6,36 @@ import Column from './Components/Column'
 
 const HomePage = () => {	
 	const [columns, setColumns] = useState([1, 2, 3, 4, 5, 6, 7])
+	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
+	const [testClicked, setTestClicked] = useState(false)
+	
+	
+	useEffect(() => {
+		const handleWindowMouseMove = event => {
+			setCoordinates({
+				x: event.clientX,
+				y: event.clientY,
+			});
+		};
+		
+		const handleWindowClick = event => {
+			console.log(event)
+			setTestClicked(!testClicked)
+		}
+		
+		window.addEventListener('click', handleWindowClick)
+		window.addEventListener('mousemove', handleWindowMouseMove);
+	
+		return () => {
+			window.removeEventListener('mousemove', handleWindowMouseMove);
+			window.removeEventListener('click', handleWindowClick)
+		};
+	}, []);
+	
+	useEffect(() => {
+
+		// console.log(coordinates)
+	}, [coordinates])
 	
 	function onColumnClick(index) {
 		// Move value in array one step to the left
@@ -14,14 +44,13 @@ const HomePage = () => {
 		let valueAtNewIndex = columns[index + 1]
 		columnsCopy[index] = valueAtNewIndex
 		columnsCopy[index + 1] = startValue
-		setColumns(columnsCopy)
-		
-		console.log(columnsCopy)
-		
+		setColumns(columnsCopy)	
 	}
+
 	
 	const columnsList = columns.map((item, index) => {
-		return <Column onClick={() => onColumnClick(index)} key={index} number={item} />
+		
+		return <Column index={index} xHover={(coordinates.x > 300)} onClick={() => onColumnClick(index)} key={index} number={item} coordinates={coordinates} />
 	})
 	
 	const columnsParentStyle = {
@@ -38,6 +67,7 @@ const HomePage = () => {
 		<div style={style}>
 			<Box />
 			<MousePosition />
+			{testClicked && <p>Clicked!</p>}
 			<div className='columnsParent' style={columnsParentStyle}>
 				{columnsList}
 			</div>
