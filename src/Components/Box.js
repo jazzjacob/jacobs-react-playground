@@ -66,6 +66,14 @@ const Box = () => {
 		setClicked(true)
 	}
 	
+	function onMouseUp(event) {
+		setClicked(false)
+		setOffset({
+			x: 0,
+			y: 0
+		})
+	}
+	
 	useEffect(() => {
 		console.log(offset)
 	}, [offset])
@@ -73,14 +81,14 @@ const Box = () => {
 	
 	
 	return (
-		<div
+		<button
 			style={clicked ? boxStyle : altBoxStyle }
 			className={styles.box}
 			onMouseDown={onMouseDown}
-			onMouseUp={() => setClicked(false)}
+			onMouseUp={onMouseUp}
 			onMouseMove={onMouseMove}
 		>
-		</div>
+		</button>
 	)
 }
 
