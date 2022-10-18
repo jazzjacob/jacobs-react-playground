@@ -30,7 +30,7 @@ const Box = () => {
 		left: `${coordinates.x - offset.x}px`,
 		width: '100px',
 		height: '100px',
-		backgroundColor: 'gold',
+		backgroundColor: 'darkgray',
 		cursor: 'grabbing'
 	})
 
@@ -42,7 +42,7 @@ const Box = () => {
 			left: `${coordinates.x - offset.x}px`,
 			width: '100px',
 			height: '100px',
-			backgroundColor: 'gold',
+			backgroundColor: 'darkgray',
 			cursor: 'grabbing'
 		})
 		
@@ -54,15 +54,13 @@ const Box = () => {
 	}
 	
 	function onMouseMove(event) {
-	
-	}
-	
-	function onMouseDown(event) {
-		console.log(event)
 		setOffset({
 			x: event.clientX - event.target.offsetLeft,
 			y: event.clientY - event.target.offsetTop
 		})
+	}
+	
+	function onMouseDown(event) {
 		setClicked(true)
 	}
 	
@@ -86,8 +84,9 @@ const Box = () => {
 			className={styles.box}
 			onMouseDown={onMouseDown}
 			onMouseUp={onMouseUp}
-			onMouseMove={onMouseMove}
+			onMouseMove={!clicked ? onMouseMove : null}
 		>
+			I am draggable
 		</button>
 	)
 }
