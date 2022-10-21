@@ -7,6 +7,9 @@ const Box = () => {
 	const [offset, setOffset] = useState({x: 0, y: 0})
 	const [hoverState, setHoverState] = useState(null)
 	const [relativeCoordinates, setRelativeCoordinates] = useState({x: 0, y: 0})
+	const [relativeOrigo, setRelativeOrigo] = useState([null])
+	
+	let boxClicked = false
 	
 	useEffect(() => {
 		const handleWindowMouseMove = event => {
@@ -14,6 +17,7 @@ const Box = () => {
 				x: event.clientX,
 				y: event.clientY,
 			});
+			
 		};
 		
 		window.addEventListener('mousemove', handleWindowMouseMove);
@@ -25,7 +29,7 @@ const Box = () => {
 	
 	
 	const [boxStyle, setBoxStyle] = useState({
-		position: 'absolute',
+		position: 'relative',
 		top: `${coordinates.y - offset.y}px`,
 		left: `${coordinates.x - offset.x}px`,
 		width: '100px',
@@ -37,9 +41,10 @@ const Box = () => {
 	
 	useEffect(() => {
 		setBoxStyle({
-			position: 'absolute',
-			top: `${coordinates.y - offset.y}px`,
-			left: `${coordinates.x - offset.x}px`,
+			position: 'relative',
+			top: `${(coordinates.y - relativeOrigo.y) - offset.y}px`,
+			// (250 - 15) = 235
+			left: `${(coordinates.x - relativeOrigo.x) - offset.x}px`,
 			width: '100px',
 			height: '100px',
 			backgroundColor: 'darkgray',
@@ -54,10 +59,12 @@ const Box = () => {
 	}
 	
 	function onMouseMove(event) {
+		console.log(event.target.offsetTop)
 		setOffset({
 			x: event.clientX - event.target.offsetLeft,
 			y: event.clientY - event.target.offsetTop
 		})
+		setRelativeOrigo({x: event.target.offsetLeft, y: event.target.offsetTop})
 	}
 	
 	function onMouseDown(event) {
@@ -73,7 +80,7 @@ const Box = () => {
 	}
 	
 	useEffect(() => {
-		console.log(offset)
+		
 	}, [offset])
 	
 	

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Box from './Components/Box'
 import MousePosition from './Components/MousePosition'
 import Column from './Components/Column'
+import DraggableBoxesContainer from './Components/DraggableBoxesContainer'
 
 const HomePage = () => {	
 	const [columns, setColumns] = useState([1, 2, 3, 4, 5, 6, 7])
@@ -77,6 +78,7 @@ const HomePage = () => {
 				{columnsList}
 			</div>
 			<Box />
+			<DraggableBoxesContainer />
 		</div>
 	)
 }
