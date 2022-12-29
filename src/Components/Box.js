@@ -59,7 +59,6 @@ const Box = () => {
 	}
 	
 	function onMouseMove(event) {
-		console.log(event.target.offsetTop)
 		setOffset({
 			x: event.clientX - event.target.offsetLeft,
 			y: event.clientY - event.target.offsetTop

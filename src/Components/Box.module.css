@@ -5,10 +5,37 @@
 	align-items: center;
 }
 
-.box:hover {
+.draggableBox {
+	width: 100px;
+	height: 100px;
+	background-color: blue;
+	z-index: 99;
+	color: white;
+}
+
+.draggableBoxCopy {
+	width: 100px;
+	height: 100px;
+	background-color: coral;
+	z-index: 10;
+}
+
+.invisible {
+	width: 100px;
+	height: 100px;
+	opacity: 0;
+	z-index: 999;
+}
+
+.box:hover, .draggableBox:hover {
 	cursor: grab;
 }
 
-.box:focus, .box:focus-visible, .box:active {
+.box:focus,
+.box:focus-visible,
+.box:active,
+.draggableBox:active,
+.draggableBoxCopy:focus,
+.draggableBoxCopy:hover {
 	cursor: grabbing;
 }
