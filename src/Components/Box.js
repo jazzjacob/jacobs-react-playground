@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './Box.module.css'
 
-const Box = () => {
+const Box = ({ dragging }) => {
 	const [clicked, setClicked] = useState(false)
 	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
 	const [offset, setOffset] = useState({x: 0, y: 0})
@@ -68,6 +68,7 @@ const Box = () => {
 	
 	function onMouseDown(event) {
 		setClicked(true)
+		dragging(true)
 	}
 	
 	function onMouseUp(event) {
@@ -76,6 +77,7 @@ const Box = () => {
 			x: 0,
 			y: 0
 		})
+		dragging(false)
 	}
 	
 	useEffect(() => {

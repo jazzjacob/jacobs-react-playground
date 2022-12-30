@@ -23,6 +23,7 @@ const Column = forwardRef((props, ref) => {
 		height: '100px',
 		borderRadius: '12px'
 	})
+	const [dragOver, setDragOver] = useState(false)
 	
 	const [xHover, setXHover] = useState(false);
 	
@@ -88,6 +89,26 @@ const Column = forwardRef((props, ref) => {
 		setCoords({x: columnRef.current.offsetLeft});
 	}
 	
+	useEffect(() => {
+		const mouseOverX = props.coordinates.x >= rectangleCoordinates.left && rectangleCoordinates.right >= props.coordinates.x;
+		const mouseOverY = rectangleCoordinates.bottom >= props.coordinates.y && props.coordinates.y >= rectangleCoordinates.top;
+		const mouseOverColumn = mouseOverX && mouseOverY
+		
+		console.log(props.coordinates.y)
+		if (!props.dragging) {
+			return;
+		}
+		if (mouseOverColumn) {
+			if (!dragOver) {
+				setDragOver(true)
+			}
+		} else {
+			if (dragOver) {
+				setDragOver(false)
+			}
+		}
+	}, [props.coordinates])
+	
 	return (
 		<div
 			onScroll={() => handleScroll}
@@ -98,8 +119,9 @@ const Column = forwardRef((props, ref) => {
 			onClick={props.onClick}
 		>
 			{props.number}
-			<p>---{rectangleCoordinates.left}</p>
+			<p>_{rectangleCoordinates.left}_{rectangleCoordinates.right}</p>
 			<p>_{word}</p>
+			{dragOver && <p>DRAG OVER</p>}
 		</div>
 	)
 })
