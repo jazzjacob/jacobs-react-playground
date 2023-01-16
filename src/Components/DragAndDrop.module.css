@@ -1,0 +1,18 @@
+.container {
+	width: fit-content;
+	height: 200px;
+	background-color: lightgray;
+	color: black;
+	margin: 1rem 0;
+	padding: 1rem;
+	font-family: monospace;
+	display: flex;
+}
+
+.placeholder:hover {
+	background-color: red;
+}
+
+.placeholder {
+	background-color: gray;
+}

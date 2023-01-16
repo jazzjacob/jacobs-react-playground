@@ -9,7 +9,7 @@
 	width: 100px;
 	height: 100px;
 	background-color: blue;
-	z-index: 99;
+	//z-index: 99;
 	color: white;
 }
 
@@ -17,14 +17,14 @@
 	width: 100px;
 	height: 100px;
 	background-color: coral;
-	z-index: 10;
+	//z-index: 10;
 }
 
 .invisible {
 	width: 100px;
 	height: 100px;
 	opacity: 0;
-	z-index: 999;
+	//z-index: 0;
 }
 
 .box:hover, .draggableBox:hover {

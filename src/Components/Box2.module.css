@@ -7,20 +7,13 @@
 	background-color: lightgray;
 }
 
-.column::after {
-	content: 'hello';
-	width: 100px;
-	height: 100px;
-	background-color: green;
+.column * {
+	pointer-events: none;
 }
 
 .placeholder {
 	height: 100px;
 	width: 100px;
 	background-color: black;
-	position: relative;
-}
-
-.placeholder:hover {
-	background-color: red;
+	z-index: 1;
 }

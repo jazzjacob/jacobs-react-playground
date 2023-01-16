@@ -6,9 +6,12 @@ import Column from './Components/Column'
 import DraggableBoxesContainer from './Components/DraggableBoxesContainer'
 import NewDraggableBoxContainer from './Components/NewDraggableBoxContainer'
 import DraggableBox from './Components/DraggableBox'
+import DraggableWithPlaceholderBehind from './Components/DraggableWithPlaceholderBehind'
+import DragAndDrop from './Components/DragAndDrop'
 
 const HomePage = () => {	
 	const [columns, setColumns] = useState([1, 2, 3, 4, 5, 6, 7])
+	const [cols, setCols] = useState([1])
 	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
 	const [testClicked, setTestClicked] = useState(false)
 	const [scrolling, setScrolling] = useState(0)
@@ -81,6 +84,7 @@ const HomePage = () => {
 		return (
 			<Column
 				dragging={dragging}
+				handleDrag={handleDrag}
 				index={index}
 				onMouseEnter={() => onColumnEnter(index)}
 				onClick={() => onColumnClick(index)}
@@ -99,14 +103,55 @@ const HomePage = () => {
 		)
 	})
 	
+	const colsList = cols.map((item, index) => {
+		return (
+			<Column
+				dragging={dragging}
+				handleDrag={handleDrag}
+				index={index}
+				onMouseEnter={() => onColumnEnter(index)}
+				onClick={() => onColumnClick(index)}
+				key={index}
+				number={item}
+				coordinates={coordinates}
+				ref={(node) => {
+					const map = getMap();
+					if (node) {
+						map.set(index, node);
+					} else {
+						map.delete(index);
+					}
+				}}
+			/>
+		)
+	})
+	
+	const boxList = columns.map(() => {
+		return (
+			<Box dragging={handleDrag} />
+		)
+	})
+	
 	const columnsParentStyle = {
 		display: 'flex',
 		flexDirection: 'row',
 		width: '100%',
 		gap: '12px',
-		backgroundColor: 'blue',
+		backgroundColor: 'lightgray',
 		padding: '8px',
-		overflowX: 'auto'
+		overflowX: 'auto',
+		marginBottom: '1rem'
+	}
+	
+	const boxParentStyle = {
+		display: 'flex',
+		flexDirection: 'row',
+		width: '100%',
+		gap: '12px',
+		backgroundColor: 'lightgray',
+		padding: '8px',
+		overflowX: 'auto',
+		margin: '2rem 0'
 	}
 	
 	function handleScroll() {
@@ -131,18 +176,40 @@ const HomePage = () => {
 		setDragging(dragging)
 	}
 	
+	function handleMouseUp() {
+		if (dragging) {
+			setDragging(false)			
+		}
+	}
+	
 	
 	return (
-		<div style={style} onDragOver={handleDragOver}>
+		<div style={style} onDragOver={handleDragOver} onMouseUp={handleMouseUp}>
 			<MousePosition />
-			<h2>Dragging: {dragging ? 'true' : 'false'}</h2>
 			{testClicked && <p>Clicked!</p>}
+			<DragAndDrop coordinates={coordinates} setDragging={(dragging) => handleDrag(dragging)} dragging={dragging} />
+			<DraggableWithPlaceholderBehind />
+			<h2>Dragging: {dragging ? 'true' : 'false'}</h2>
+			<div
+				onScroll={handleScroll}
+				className='columnsParent'
+				style={columnsParentStyle}
+			>
+				{colsList}				
+			</div>
 			<div
 				onScroll={handleScroll}
 				className='columnsParent'
 				style={columnsParentStyle}
 			>
 				{columnsList}
+			</div>
+			<div
+				onScroll={handleScroll}
+				className='columnsParent'
+				style={boxParentStyle}
+			>
+				{boxList}				
 			</div>
 			<Box dragging={handleDrag} />
 			<DraggableBoxesContainer />

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
-import styles from './Column.module.css'
+import styles from './Box2.module.css'
 
-const Column = forwardRef((props, ref) => {
+const Box2 = forwardRef((props, ref) => {
 	useImperativeHandle(ref, () => ({
 		onScroll: (event) => {
 		 // Get the event from parent
@@ -34,14 +34,13 @@ const Column = forwardRef((props, ref) => {
 		color: 'white'
 	})
 	const [boxStyle, setBoxStyle] = useState({
-		position: 'relative',
+		position: 'absolute',
 		top: `${coordinates.y - offset.y}px`,
 		left: `${coordinates.x - offset.x}px`,
 		width: '100px',
 		height: '100px',
 		backgroundColor: 'darkgray',
-		cursor: 'grabbing',
-		zIndex: '10'
+		cursor: 'grabbing'
 	})
 	
 	const columnRef = useRef()
@@ -72,7 +71,7 @@ const Column = forwardRef((props, ref) => {
 		//console.dir(elementRect)
 		
 		const handleWindowScroll = event => {
-			console.log('window scrolls')
+			//console.log('window scrolls')
 		};
 		
 		window.addEventListener('scroll', handleWindowScroll);
@@ -87,37 +86,48 @@ const Column = forwardRef((props, ref) => {
 	}, [props.scrolling])
 	
 	useEffect(() => {
-		const mouseOverX = props.coordinates.x >= rectangleCoordinates.left && rectangleCoordinates.right >= props.coordinates.x;
-		const mouseOverY = rectangleCoordinates.bottom >= props.coordinates.y && props.coordinates.y >= rectangleCoordinates.top;
+		const mouseOverX = coordinates.x >= rectangleCoordinates.left && rectangleCoordinates.right >= coordinates.x;
+		//console.log(rectangleCoordinates.left)
+		//console.log('YOOOO')
+		const mouseOverY = rectangleCoordinates.bottom >= coordinates.y && coordinates.y >= rectangleCoordinates.top;
 		const mouseOverColumn = mouseOverX && mouseOverY
 		
-		//console.log(props.coordinates.y)
-		//console.log('COOL')
-		if (!props.dragging) {
-			return;
+		// Handle weird "bug"
+		if (coordinates.x == 0 && coordinates.y == 0) {
+			return
 		}
+		
+		/*if (!props.dragging) {
+			return;
+		}*/
 		if (mouseOverColumn) {
-			if (!dragOver && !active) {
+			//console.log('MOUSE OVER BOX')
+			if (!dragOver && props.dragging) {
 				setDragOver(true)
+				props.handleDragOver(props.index)
 			}
 		} else {
 			if (dragOver) {
 				setDragOver(false)
+				props.handleDragOver(null)
 			}
 		}
-	}, [props.coordinates])
+	}, [coordinates])
 	
 	useEffect(() => {
 		setBoxStyle({
-			position: 'relative',
+			position: 'absolute',
 			top: `${(coordinates.y - relativeOrigo.y) - offset.y}px`,
+			top: `${coordinates.y - offset.y}px`,
 			// (250 - 15) = 235
 			left: `${(coordinates.x - relativeOrigo.x) - offset.x}px`,
+			left: `${coordinates.x - offset.x}px`,
 			width: '100px',
 			height: '100px',
 			backgroundColor: 'darkgray',
 			cursor: 'grabbing',
-			color: 'white'
+			color: 'white',
+			zIndex: '2'
 		})
 		
 	}, [coordinates])
@@ -129,6 +139,7 @@ const Column = forwardRef((props, ref) => {
 	}, [props.dragging])
 	
 	function onMouseMove(event) {
+		//console.log(event)
 		setOffset({
 			x: event.clientX - event.target.offsetLeft,
 			y: event.clientY - event.target.offsetTop
@@ -138,16 +149,16 @@ const Column = forwardRef((props, ref) => {
 	
 	function onMouseDown(event) {
 		setClicked(true)
-		props.handleDrag(true)
+		props.handleDrag(event, true, props.index)
 	}
 	
 	function onMouseUp(event) {
 		setClicked(false)
-		setOffset({
+		/*setOffset({
 			x: 0,
 			y: 0
-		})
-		props.handleDrag(false)
+		})*/
+		props.handleDrag(false, props.index)
 	}
 	
 	function updateRectangleCoordinates() {
@@ -197,16 +208,27 @@ const Column = forwardRef((props, ref) => {
 					props.onMouseEnter()
 				}}
 				onMouseLeave={handleMouseLeave}
-				onClick={props.onClick}
+				//onClick={() => props.onClick}
 			>
 				{props.number}
 				<p>_{rectangleCoordinates.left}_{rectangleCoordinates.right}</p>
-				<p>_{word}</p>
 				{dragOver && <p>DRAG OVER</p>}
 				{active && <p>active</p>}
+				{!active && props.dragging && (
+					<p>dragging</p>
+				)}
 			</button>
+			{active && props.dragging && false && (
+				<div
+					style={{
+						height: '100px',
+						width: '100px',
+						backgroundColor: 'red'
+					}}>
+				</div>			
+			)}
 		</>
 	)
 })
 
-export default Column
+export default Box2
