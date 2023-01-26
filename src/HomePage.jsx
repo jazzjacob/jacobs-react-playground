@@ -126,9 +126,9 @@ const HomePage = () => {
 		)
 	})
 	
-	const boxList = columns.map(() => {
+	const boxList = columns.map((item, index) => {
 		return (
-			<Box dragging={handleDrag} />
+			<Box dragging={handleDrag} key={index} />
 		)
 	})
 	

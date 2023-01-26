@@ -45,7 +45,7 @@ const DraggableBoxesContainer = () => {
 		<div style={containerStyle}>
 			<h2 style={containerHeader}>I am DraggableBoxContainer</h2>
 			<div style={draggableBoxes}>
-				{boxes.map((boxData) => boxData.box ? <Box /> : <EmptyBox />)}
+				{boxes.map((boxData, index) => boxData.box ? <Box key={index} /> : <EmptyBox key={index} />)}
 			</div>
 		</div>
 	)
