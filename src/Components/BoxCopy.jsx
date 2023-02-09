@@ -12,8 +12,8 @@ const BoxCopy = (props) => {
 	
 	useEffect(() => {
 		setStyle({
-			height: '100px',
-			width: '100px',
+			height: props.boxSize.height,
+			width: props.boxSize.width,
 			backgroundColor: 'coral',
 			position: 'absolute',
 			top: `${props.coordinates.y - props.offset.y}px`,

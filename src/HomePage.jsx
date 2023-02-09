@@ -50,21 +50,8 @@ const HomePage = () => {
 	
 	useEffect(() => {
 
-		// console.log(coordinates)
 	}, [coordinates])
 	
-	
-	// Window click event listener 
-	/*useEffect(() => {
-		const handleWindowClick = event => {
-			console.log(event)
-			setTestClicked(!testClicked)
-		}
-		
-		window.addEventListener('click', handleWindowClick)
-		
-		return () => window.removeEventListener('click', handleWindowClick)
-	}, [testClicked])*/
 	
 	function onColumnClick(index) {
 		// Move value in array one step to the left
