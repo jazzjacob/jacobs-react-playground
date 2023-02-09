@@ -24,12 +24,12 @@ const Box2 = forwardRef((props, ref) => {
 	const [dragOver, setDragOver] = useState(false)
 	const [xHover, setXHover] = useState(false);
 	const [style, setStyle] = useState({
-		width: '200px',
+		width: 'fit-content',
 		flex: 'none',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		height: '100px',
+		height: 'fit-content',
 		borderRadius: '12px',
 		color: 'white'
 	})
@@ -37,8 +37,8 @@ const Box2 = forwardRef((props, ref) => {
 		position: 'absolute',
 		top: `${coordinates.y - offset.y}px`,
 		left: `${coordinates.x - offset.x}px`,
-		width: '100px',
-		height: '100px',
+		width: 'fit-content',
+		height: 'fit-content',
 		backgroundColor: 'darkgray',
 		cursor: 'grabbing'
 	})
@@ -122,8 +122,8 @@ const Box2 = forwardRef((props, ref) => {
 			// (250 - 15) = 235
 			left: `${(coordinates.x - relativeOrigo.x) - offset.x}px`,
 			left: `${coordinates.x - offset.x}px`,
-			width: '100px',
-			height: '100px',
+			width: 'fit-content',
+			height: 'fit-content',
 			backgroundColor: 'darkgray',
 			cursor: 'grabbing',
 			color: 'white',
@@ -136,6 +136,8 @@ const Box2 = forwardRef((props, ref) => {
 		if (dragOver && !props.dragging) {
 			setDragOver(false)
 		}
+		updateRectangleCoordinates()
+		
 	}, [props.dragging])
 	
 	function onMouseMove(event) {
@@ -149,7 +151,10 @@ const Box2 = forwardRef((props, ref) => {
 	
 	function onMouseDown(event) {
 		setClicked(true)
-		props.handleDrag(event, true, props.index)
+		const elementRect = columnRef.current.getBoundingClientRect()
+		console.log(elementRect.width)
+		console.log(elementRect.height)
+		props.handleDrag(event, true, props.index, {width: elementRect.width, height: elementRect.height})
 	}
 	
 	function onMouseUp(event) {
@@ -177,8 +182,8 @@ const Box2 = forwardRef((props, ref) => {
 	}
 	
 	const altBoxStyle = {
-		width: '100px',
-		height: '100px',
+		width: 'fit-content',
+		height: 'fit-content',
 		backgroundColor: 'blue',
 		color: 'white'
 	}
@@ -189,6 +194,10 @@ const Box2 = forwardRef((props, ref) => {
 	
 	function handleMouseLeave() {
 		setActive(false)
+	}
+	
+	const flexibleBoxSize = {
+		backgroundColor: 'green',
 	}
 	
 	return (
@@ -202,7 +211,8 @@ const Box2 = forwardRef((props, ref) => {
 				onScroll={() => handleScroll}
 				ref={columnRef}
 				//style={style}
-				className={styles.column}
+				//className={styles.column}
+				//style={flexibleBoxSize}
 				onMouseOver={() => {
 					handleMouseOver()
 					props.onMouseEnter()
@@ -211,17 +221,22 @@ const Box2 = forwardRef((props, ref) => {
 				//onClick={() => props.onClick}
 			>
 				{props.number}
-				<p>_{rectangleCoordinates.left}_{rectangleCoordinates.right}</p>
-				{dragOver && <p>DRAG OVER</p>}
-				{active && <p>active</p>}
-				{!active && props.dragging && (
-					<p>dragging</p>
+				{false && <p style={{ pointerEvents: 'none' }}>_{rectangleCoordinates.left}_{rectangleCoordinates.right}</p>}
+				<p style={{ pointerEvents: 'none' }}>Hello</p>
+				<p style={{ pointerEvents: 'none' }}>Hello</p>
+				{props.number % 2 == 0 && <p style={{ pointerEvents: 'none' }}>Hello0000000000</p>}
+				{props.number == 3 && <p>Tjo bre</p>}
+				{props.number == 3 && <p>Tjo bre</p>}
+				{dragOver && <p style={{ pointerEvents: 'none' }}>DRAG OVER</p>}
+				{active && false && <p style={{ pointerEvents: 'none' }}>active</p>}
+				{!active && props.dragging && false && (
+					<p style={{ pointerEvents: 'none' }}>dragging</p>
 				)}
 			</button>
 			{active && props.dragging && false && (
 				<div
 					style={{
-						height: '100px',
+						height: '200px',
 						width: '100px',
 						backgroundColor: 'red'
 					}}>

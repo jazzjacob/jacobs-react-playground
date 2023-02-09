@@ -21,8 +21,8 @@ const DragAndDrop = (props) => {
 	const [currentDraggingIndex, setCurrentDraggingIndex] = useState(null)
 	const [dragOverNumber, setDragOverNumber] = useState(null)
 	const [draggingBoxData, setDraggingBoxData] = useState(null)
-	const [once, setOnce] = useState(false)
 	const [offset, setOffset] = useState({x: 0, y: 0})
+	const [draggingBoxSize, setDraggingBoxSize] = useState({width: 0, height: 0})
 	const [boxList, setBoxlist] = useState(boxes.map((item, index) => {
 		return (
 			<Box2
@@ -48,12 +48,15 @@ const DragAndDrop = (props) => {
 	}))
 	
 	const childrenRef = useRef(null)
-	
-	let ONCE = false
 
 	useEffect(() => {
-		if (!props.dragging) {
+		// Removed this, still seems to work
+		/*if (!props.dragging) {
 			returnToArray()
+		}*/
+		
+		if (props.dragging) {
+			console.log('dragging!!!')
 		}
 	}, [props.dragging])
 	
@@ -62,9 +65,10 @@ const DragAndDrop = (props) => {
 			if (item.dragging) {
 				return (
 					<div
+						key={index}
 						style={{
-							height: '100px',
-							width: '100px'
+							height: draggingBoxSize.height,
+							width: draggingBoxSize.width
 						}}
 						className={styles.placeholder}
 						onClick={returnToArray}
@@ -98,21 +102,6 @@ const DragAndDrop = (props) => {
 		}))
 	}, [boxes])
 	
-	/*useEffect(() => {
-		const handleWindowMouseMove = event => {
-			setCoordinates({
-				x: event.clientX,
-				y: event.clientY,
-			});
-		};
-		
-		window.addEventListener('mousemove', handleWindowMouseMove);
-	
-		return () => {
-			window.removeEventListener('mousemove', handleWindowMouseMove);
-		};
-	}, []);*/
-	
 	useEffect(() => {
 		setCoordinates(coordinates)
 		//console.log('YO')
@@ -133,10 +122,12 @@ const DragAndDrop = (props) => {
 		return childrenRef.current;
 	}
 	
-	useEffect(() => console.log('HERE IS ONCE: ' + once), [once]) 
-	
-	function handleDrag(event, dragging, index) {
+	function handleDrag(event, dragging, index, boxSize) {
+		console.log('BOX SIZE:')
+		console.log(boxSize)
+		setDraggingBoxSize(boxSize)
 		props.setDragging(true)
+		console.log(event)
 		console.log('offset x:')
 		console.log(event.clientX - event.target.offsetLeft)
 		console.log('offset y:')
@@ -161,23 +152,9 @@ const DragAndDrop = (props) => {
 	}
 	
 	function handleDragOver(index) {
-		//console.log('Setting once to false')
-		//setOnce(false)
-		//console.log('index: ' + index)
-		//setCurrentDraggingIndex(index)
 		if (index != null) {
 			switchToIndex(index)
-			console.log('handle drag over')			
 		}
-		/*
-		setDragOverNumber(index)
-		let boxesCopy = [...boxes]
-		let dragOverValue = boxes[index]
-		let dragValue = boxes[draggingStartIndex]
-		boxesCopy[index] = dragValue
-		boxesCopy[draggingStartIndex] = dragOverValue
-		setBoxes(boxesCopy)
-		*/
 	}
 	
 	function onBoxEnter(index) {
@@ -186,7 +163,6 @@ const DragAndDrop = (props) => {
 	
 	function onBoxClick(event, index) {
 		console.log(event)
-		console.log('Hellooo')
 		// Move value in array one step to the left
 		let boxesCopy = [...boxes]
 		let startValue = boxes[index]
@@ -233,18 +209,10 @@ const DragAndDrop = (props) => {
 		if (index == null) {
 			return
 		}
-		//console.log('switching to index ' + index)
-		//console.log('current dragging index: ' + currentDraggingIndex)
 		
 		if (index == currentDraggingIndex) {
 			return
 		}
-		
-		/*
-		if (once) {
-			return
-		}
-		*/
 		
 		let boxesCopy = [...boxes]
 		let startValue = boxes[currentDraggingIndex]
@@ -253,8 +221,6 @@ const DragAndDrop = (props) => {
 		boxesCopy[index] = startValue
 		setBoxes(boxesCopy)
 		setCurrentDraggingIndex(index)
-		console.log('Setting once to true')
-		setOnce(true)
 	}
 	
 	return (
@@ -264,7 +230,7 @@ const DragAndDrop = (props) => {
 				{false && <p>{draggingStartIndex}</p>}
 				{dragging && <p>{dragOverNumber}</p>}
 				{boxList}
-				{props.dragging && <BoxCopy coordinates={props.coordinates} offset={offset} data={draggingBoxData.number} onMouseUp={returnToArray} />}
+				{props.dragging && <BoxCopy coordinates={props.coordinates} offset={offset} data={draggingBoxData.number} onMouseUp={returnToArray} boxSize={draggingBoxSize} />}
 			</div>
 
 			{props.dragging && (
