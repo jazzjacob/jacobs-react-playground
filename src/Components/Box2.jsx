@@ -13,6 +13,7 @@ const Box2 = forwardRef((props, ref) => {
 	
 	const [clicked, setClicked] = useState(false)
 	const [coordinates, setCoordinates] = useState({x: 0, y: 0})
+	const [previousCoordinates, setPreviousCoordinates] = useState({x: 0, y: 0})
 	const [offset, setOffset] = useState({x: 0, y: 0})
 	const [hoverState, setHoverState] = useState(null)
 	const [relativeCoordinates, setRelativeCoordinates] = useState({x: 0, y: 0})
@@ -49,17 +50,15 @@ const Box2 = forwardRef((props, ref) => {
 	
 	useEffect(() => {
 		const handleWindowMouseMove = event => {
+			setPreviousCoordinates(coordinates)
 			setCoordinates({
 				x: event.clientX,
 				y: event.clientY,
 			});
 			
 			updateRectangleCoordinates()
-			//console.log('Mouse is moving')
-			//console.log(coordinates.x)
-			if (coordinates.x - rectangleCoordinates.left < 0) {
-				setSide('left')
-			}
+			console.log('Mouse is moving')
+			console.log(event)
 		};
 		
 		window.addEventListener('mousemove', handleWindowMouseMove);
@@ -278,15 +277,18 @@ const Box2 = forwardRef((props, ref) => {
 				//onClick={() => props.onClick}
 			>
 				{props.number}
-				{true && <p style={{ pointerEvents: 'none' }}>_{rectangleCoordinates.top}_{rectangleCoordinates.bottom}</p>}
+				{false && <p style={{ pointerEvents: 'none' }}>_{rectangleCoordinates.top}_{rectangleCoordinates.bottom}</p>}
 				<p style={{ pointerEvents: 'none' }}>Hello</p>
 				<p style={{ pointerEvents: 'none' }}>Hello</p>
-				{props.number % 2 == 0 && <p style={{ pointerEvents: 'none' }}>Hello0000000000</p>}
+				{props.number % 2 == 0 && <p style={{ pointerEvents: 'none' }}>Hello00000000000ooooooooooo</p>}
 				{props.number == 3 && <p>Tjo bre</p>}
 				{props.number == 3 && <p>Tjo bre</p>}
 				{dragOver && <p style={{ pointerEvents: 'none' }}>DRAG OVER</p>}
+				{dragOver && <p>Coming from: {side}</p>}
 				<p>{(coordinates.x) - rectangleCoordinates.left}</p>
 				<p>{coordinates.y - rectangleCoordinates.top}</p>
+				<p>Coordinates: {coordinates.x}</p>
+				<p>Prev: {previousCoordinates.x}</p>
 				{active && false && <p style={{ pointerEvents: 'none' }}>active</p>}
 				{!active && props.dragging && false && (
 					<p style={{ pointerEvents: 'none' }}>dragging</p>

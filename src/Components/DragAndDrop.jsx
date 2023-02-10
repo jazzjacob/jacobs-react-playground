@@ -152,8 +152,9 @@ const DragAndDrop = (props) => {
 	}
 	
 	function handleDragOver(index) {
+		console.log('dragging over')
 		if (index != null) {
-			switchToIndex(index)
+			//switchToIndex(index)
 		}
 	}
 	
@@ -205,7 +206,6 @@ const DragAndDrop = (props) => {
 	}
 	
 	function switchToIndex(index) {
-		
 		if (index == null) {
 			return
 		}
