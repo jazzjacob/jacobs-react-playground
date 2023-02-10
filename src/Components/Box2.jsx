@@ -4,10 +4,10 @@ import styles from './Box2.module.css'
 const Box2 = forwardRef((props, ref) => {
 	useImperativeHandle(ref, () => ({
 		onScroll: (event) => {
-		 // Get the event from parent
-		 console.log('parent scrollz')
-		 updateRectangleCoordinates()
-		 setWord("Yo")
+			// Get the event from parent
+			console.log('parent scrollz')
+			updateRectangleCoordinates()
+			setWord("Yo")
 		}
 	}));
 	
@@ -23,6 +23,7 @@ const Box2 = forwardRef((props, ref) => {
 	const [word, setWord] = useState("Hello")
 	const [dragOver, setDragOver] = useState(false)
 	const [xHover, setXHover] = useState(false);
+	const [side, setSide] = useState('')
 	const [style, setStyle] = useState({
 		width: 'fit-content',
 		flex: 'none',
@@ -52,6 +53,9 @@ const Box2 = forwardRef((props, ref) => {
 				y: event.clientY,
 			});
 			
+			if (coordinates.x - rectangleCoordinates.left < 0) {
+				setSide('left')
+			}
 		};
 		
 		window.addEventListener('mousemove', handleWindowMouseMove);
@@ -86,6 +90,7 @@ const Box2 = forwardRef((props, ref) => {
 	}, [props.scrolling])
 	
 	useEffect(() => {
+		
 		const mouseOverX = coordinates.x >= rectangleCoordinates.left && rectangleCoordinates.right >= coordinates.x;
 		//console.log(rectangleCoordinates.left)
 		//console.log('YOOOO')
@@ -189,6 +194,7 @@ const Box2 = forwardRef((props, ref) => {
 	}
 	
 	function handleMouseOver() {
+		console.log('Mouse is over')
 		setActive(true)
 	}
 	
@@ -198,6 +204,19 @@ const Box2 = forwardRef((props, ref) => {
 	
 	const flexibleBoxSize = {
 		backgroundColor: 'green',
+	}
+	
+	function handleMouseEnter(event) {
+		const box = columnRef.current.getBoundingClientRect();
+		console.log("handling mouse enter")
+		const x = event.clientX;
+		const y = event.clientY;
+		console.log(x)
+		console.log(box.left)
+		
+		if (x < box.left) {
+			setSide("left");
+		}
 	}
 	
 	return (
@@ -211,8 +230,9 @@ const Box2 = forwardRef((props, ref) => {
 				onScroll={() => handleScroll}
 				ref={columnRef}
 				//style={style}
-				//className={styles.column}
+				className={styles.column}
 				//style={flexibleBoxSize}
+				onMouseEnter={handleMouseEnter}
 				onMouseOver={() => {
 					handleMouseOver()
 					props.onMouseEnter()
@@ -221,17 +241,24 @@ const Box2 = forwardRef((props, ref) => {
 				//onClick={() => props.onClick}
 			>
 				{props.number}
-				{false && <p style={{ pointerEvents: 'none' }}>_{rectangleCoordinates.left}_{rectangleCoordinates.right}</p>}
+				{true && <p style={{ pointerEvents: 'none' }}>_{rectangleCoordinates.top}_{rectangleCoordinates.bottom}</p>}
 				<p style={{ pointerEvents: 'none' }}>Hello</p>
 				<p style={{ pointerEvents: 'none' }}>Hello</p>
 				{props.number % 2 == 0 && <p style={{ pointerEvents: 'none' }}>Hello0000000000</p>}
 				{props.number == 3 && <p>Tjo bre</p>}
 				{props.number == 3 && <p>Tjo bre</p>}
 				{dragOver && <p style={{ pointerEvents: 'none' }}>DRAG OVER</p>}
+				{active && <p>I am active</p>}
+				{coordinates.x - rectangleCoordinates.left < 0 && <p>LEFT</p>}
+				<p>{(coordinates.x) - rectangleCoordinates.left}</p>
+				{coordinates.y - rectangleCoordinates.top < 0 && <p>TOP</p>}
+				<p>{coordinates.y - rectangleCoordinates.top}</p>
 				{active && false && <p style={{ pointerEvents: 'none' }}>active</p>}
 				{!active && props.dragging && false && (
 					<p style={{ pointerEvents: 'none' }}>dragging</p>
 				)}
+				<p>Cursor entered from:</p>
+				<p>{side}</p>
 			</button>
 			{active && props.dragging && false && (
 				<div

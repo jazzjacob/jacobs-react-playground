@@ -1,10 +1,10 @@
 .column:hover {
-	cursor: pointer;
-	background-color: gray;
+	cursor: grab;
 }
 
 .column {
 	background-color: lightgray;
+	//margin-right: 20px;
 }
 
 .column * {
