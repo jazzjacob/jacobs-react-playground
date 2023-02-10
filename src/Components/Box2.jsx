@@ -24,6 +24,7 @@ const Box2 = forwardRef((props, ref) => {
 	const [dragOver, setDragOver] = useState(false)
 	const [xHover, setXHover] = useState(false);
 	const [side, setSide] = useState('')
+	const [previousSide, setPreviousSide] = useState('')
 	const [style, setStyle] = useState({
 		width: 'fit-content',
 		flex: 'none',
@@ -53,6 +54,9 @@ const Box2 = forwardRef((props, ref) => {
 				y: event.clientY,
 			});
 			
+			updateRectangleCoordinates()
+			//console.log('Mouse is moving')
+			//console.log(coordinates.x)
 			if (coordinates.x - rectangleCoordinates.left < 0) {
 				setSide('left')
 			}
@@ -94,8 +98,41 @@ const Box2 = forwardRef((props, ref) => {
 		const mouseOverX = coordinates.x >= rectangleCoordinates.left && rectangleCoordinates.right >= coordinates.x;
 		//console.log(rectangleCoordinates.left)
 		//console.log('YOOOO')
+		
 		const mouseOverY = rectangleCoordinates.bottom >= coordinates.y && coordinates.y >= rectangleCoordinates.top;
 		const mouseOverColumn = mouseOverX && mouseOverY
+		
+		// Set what side of box cursor is
+	  if (
+			side != 'left' && 
+			coordinates.x - rectangleCoordinates.left < 0 &&
+			coordinates.y > rectangleCoordinates.top &&
+			coordinates.y < rectangleCoordinates.bottom
+		) {
+			setPreviousSide(side)
+			setSide('left')
+		}
+		if (
+			side != 'right' &&
+			rectangleCoordinates.right - coordinates.x < 0  &&
+			coordinates.y > rectangleCoordinates.top &&
+			coordinates.y < rectangleCoordinates.bottom
+		) {
+			setPreviousSide(side)
+			setSide('right')
+		}
+		if (side != 'top' && coordinates.y - rectangleCoordinates.top < 0) {
+			setPreviousSide(side)
+			setSide('top')
+		}
+		if (side != 'bottom' && rectangleCoordinates.bottom - coordinates.y < 0) {
+			setPreviousSide(side)
+			setSide('bottom')
+		}
+		if (side != 'OVER' && active) {
+			setPreviousSide(side)
+			setSide('OVER')
+		}
 		
 		// Handle weird "bug"
 		if (coordinates.x == 0 && coordinates.y == 0) {
@@ -248,17 +285,16 @@ const Box2 = forwardRef((props, ref) => {
 				{props.number == 3 && <p>Tjo bre</p>}
 				{props.number == 3 && <p>Tjo bre</p>}
 				{dragOver && <p style={{ pointerEvents: 'none' }}>DRAG OVER</p>}
-				{active && <p>I am active</p>}
-				{coordinates.x - rectangleCoordinates.left < 0 && <p>LEFT</p>}
 				<p>{(coordinates.x) - rectangleCoordinates.left}</p>
-				{coordinates.y - rectangleCoordinates.top < 0 && <p>TOP</p>}
 				<p>{coordinates.y - rectangleCoordinates.top}</p>
 				{active && false && <p style={{ pointerEvents: 'none' }}>active</p>}
 				{!active && props.dragging && false && (
 					<p style={{ pointerEvents: 'none' }}>dragging</p>
 				)}
-				<p>Cursor entered from:</p>
+				<p>Cursor position:</p>
 				<p>{side}</p>
+				<p>Previous position:</p>
+				<p>{previousSide}</p>
 			</button>
 			{active && props.dragging && false && (
 				<div
